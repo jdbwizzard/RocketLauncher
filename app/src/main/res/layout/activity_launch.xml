@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#808080"
+    tools:context="com.redrobotit.rocketlauncher.LaunchCodeActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fpScan"
+        android:height="100dp"
+        android:width="100dp"
+        android:background="#ff0000"
+        android:onClick="onClickLaunch"
+        android:text="LAUNCH"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/biohazardr"
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/fpScan"
+        android:layout_marginTop="30dp"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timerTV"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff0000"
+        android:textSize="40sp"
+        android:text="Warning:\nMissile Armed"
+        android:textAlignment="center" />
+
+</RelativeLayout>

@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="com.redrobotit.rocketlauncher.LaunchCodeActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/codeET"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="#858585"
+        android:textColor="#ffea00"
+        android:textSize="30dp"
+        android:width="120dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:maxLength="4"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Launch Code"
+        android:id="@+id/textView"
+        android:layout_gravity="center"
+        android:textColor="#ffea00"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fpScanBG"
+        android:height="100dp"
+        android:width="100dp"
+        android:background="#858585"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:onClick="checkCode"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fpScan"
+        android:height="100dp"
+        android:width="100dp"
+        android:background="@drawable/fingerprint"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="30dp"
+        android:onClick="checkCode"
+        android:layout_alignBottom="@+id/fpScanBG"
+        android:layout_alignRight="@+id/fpScanBG"
+        android:layout_alignEnd="@+id/fpScanBG"
+        android:layout_alignLeft="@+id/fpScanBG"
+        android:layout_alignStart="@+id/fpScanBG" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/biohazardy"
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/fpScan"
+        android:layout_marginTop="30dp"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/codeET"
+        android:layout_centerHorizontal="true"
+        android:text="Scan Finger"
+        android:textColor="#ffea00"
+        android:textSize="30dp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold" />
+</RelativeLayout>
