@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="com.redrobotit.rocketlauncher.LaunchCodeActivity">
+    tools:context="com.redrobotit.rocketlauncher.LaunchCodeActivity"
+    android:id="@+id/parent">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -92,4 +93,33 @@
         android:textSize="30dp"
         android:layout_marginTop="30dp"
         android:textStyle="bold" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setBTNBG"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:width="25dp"
+        android:height="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="#00ffffff"
+        android:layout_alignParentRight="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setBTN"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/setBTNBG"
+        android:layout_alignLeft="@+id/setBTNBG"
+        android:layout_alignRight="@+id/setBTNBG"
+        android:layout_alignTop="@+id/setBTNBG"
+        android:background="@drawable/setting"
+        android:onClick="onClickSettings" />
 </RelativeLayout>

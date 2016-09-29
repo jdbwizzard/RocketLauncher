@@ -6,11 +6,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,17 +39,14 @@ public class LaunchActivity extends Activity {
     int soundID_beep;
     int soundID_explosion;
 
-    private final String DEVICE_ADDRESS="C0:33:5E:BE:3F:6C";
+    private final String DEVICE_ADDRESS="20:15:04:13:08:70";
+    private String btMac;
     private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
     private BluetoothDevice device;
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    boolean deviceConnected=false;
-    Thread thread;
-    byte buffer[];
-    int bufferPosition;
-    boolean stopThread;
+    boolean con=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,30 @@ public class LaunchActivity extends Activity {
 
         soundID_beep = soundPool.load(this,R.raw.beep,1);
         soundID_explosion = soundPool.load(this,R.raw.explosion,1);
+
+        if(BTinit()){
+            con = BTconnect();
+        }
+        if(!con){
+            TextView tTV = (TextView)findViewById(R.id.timerTV);
+            tTV.setText("Connection \n Failure!");
+            Button lBTN = (Button)findViewById(R.id.launchBTN);
+            lBTN.setText("RETRY");
+            lBTN.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+
+                    finish();
+                    startActivity(getIntent());
+
+                }
+            });
+        }
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        btMac = SP.getString("btmac", "NA");
+
+
     }
 
     @Override
@@ -117,17 +140,17 @@ public class LaunchActivity extends Activity {
 
     private boolean launch(){
         boolean sendLaunchCode = false;
-        if(BTinit()) {
-            if (BTconnect()) {
+        if(con) {
                 String launchCode = "l\n";
                 try {
                     outputStream.write(launchCode.getBytes());
                     sendLaunchCode = true;
+                    socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                     sendLaunchCode = false;
                 }
-            }
+
         }
         return sendLaunchCode;
     }
@@ -173,8 +196,9 @@ public class LaunchActivity extends Activity {
     {
         boolean connected=true;
         try {
-            socket = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
+            socket = device.createRfcommSocketToServiceRecord(PORT_UUID);
             socket.connect();
+
         } catch (IOException e) {
             e.printStackTrace();
             connected=false;

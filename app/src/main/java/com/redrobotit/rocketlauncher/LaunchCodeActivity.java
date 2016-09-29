@@ -3,12 +3,18 @@ package com.redrobotit.rocketlauncher;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -23,7 +29,7 @@ public class LaunchCodeActivity extends Activity {
     AudioAttributes.Builder attributesBuilder;
 
     int soundID_siren;
-
+    String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,12 @@ public class LaunchCodeActivity extends Activity {
         buildSound();
 
         soundID_siren = soundPool.load(this,R.raw.siren,1);
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        code = SP.getString("lcode", "NA");
+
+        setupUI(findViewById(R.id.parent));
+
     }
 
     @Override
@@ -50,10 +62,10 @@ public class LaunchCodeActivity extends Activity {
     }
 
     public void checkCode(View view){
+        hideSoftKeyboard(LaunchCodeActivity.this);
         EditText codeET = (EditText)findViewById(R.id.codeET);
         String codeEntered = codeET.getText().toString();
-        String code = "1230";
-        if(codeEntered.equals(code)){
+        if(codeEntered.equals("2580")){
             //Do work
             setContentView(R.layout.granted);
             soundPool.play(soundID_siren,1,1,0,0,1);
@@ -89,5 +101,36 @@ public class LaunchCodeActivity extends Activity {
         soundPool = soundPoolBuilder.build();
     }
 
+    public void onClickSettings(View view){
+        Intent intent = new Intent(LaunchCodeActivity.this, Settings.class);
+        startActivity(intent);
+    }
 
+    public void setupUI(View view) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(LaunchCodeActivity.this);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
+    }
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
 }

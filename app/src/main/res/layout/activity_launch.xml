@@ -13,7 +13,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/fpScan"
+        android:id="@+id/launchBTN"
         android:height="100dp"
         android:width="100dp"
         android:background="#ff0000"
@@ -32,7 +32,7 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/biohazardr"
         android:adjustViewBounds="true"
-        android:layout_below="@+id/fpScan"
+        android:layout_below="@+id/launchBTN"
         android:layout_marginTop="30dp"
         android:maxHeight="200dp"
         android:maxWidth="200dp" />
