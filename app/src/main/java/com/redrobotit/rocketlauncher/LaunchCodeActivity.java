@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -29,6 +29,7 @@ public class LaunchCodeActivity extends Activity {
     AudioAttributes.Builder attributesBuilder;
 
     int soundID_siren;
+    SharedPreferences SP;
     String code;
 
     @Override
@@ -41,8 +42,8 @@ public class LaunchCodeActivity extends Activity {
 
         soundID_siren = soundPool.load(this,R.raw.siren,1);
 
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        code = SP.getString("lcode", "NA");
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
 
         setupUI(findViewById(R.id.parent));
 
@@ -62,30 +63,41 @@ public class LaunchCodeActivity extends Activity {
     }
 
     public void checkCode(View view){
-        hideSoftKeyboard(LaunchCodeActivity.this);
-        EditText codeET = (EditText)findViewById(R.id.codeET);
-        String codeEntered = codeET.getText().toString();
-        if(codeEntered.equals("2580")){
-            //Do work
-            setContentView(R.layout.granted);
-            soundPool.play(soundID_siren,1,1,0,0,1);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(LaunchCodeActivity.this,LaunchActivity.class);
-                    startActivity(intent);
+        if(!SP.getString("btmac","NA").equals("NA")) {
+            code = SP.getString("lcode", "NA");
+            hideSoftKeyboard(LaunchCodeActivity.this);
+            EditText codeET = (EditText) findViewById(R.id.codeET);
+            String codeEntered = codeET.getText().toString();
+            if(!code.equals("NA")) {
+                if (codeEntered.equals(code)) {
+                    //Do work
+                    setContentView(R.layout.granted);
+                    soundPool.play(soundID_siren, 1, 1, 0, 0, 1);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(LaunchCodeActivity.this, LaunchActivity.class);
+                            startActivity(intent);
+                        }
+                    }, 1000);
+                } else {
+                    setContentView(R.layout.denied);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setContentView(R.layout.activity_launch_code);
+                        }
+                    }, 1000);
                 }
-            }, 1000);
-        }else{
-            setContentView(R.layout.denied);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    setContentView(R.layout.activity_launch_code);
-                }
-            }, 1000);
+            }else{
+                Toast.makeText(this, "Set a launch code.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }else {
+            Toast.makeText(this, "Select Bluetooth device first.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 

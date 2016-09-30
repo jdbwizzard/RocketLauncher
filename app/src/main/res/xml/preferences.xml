@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference android:title="Device"
+    <com.redrobotit.rocketlauncher.BTDevicePreference
         android:key="btmac"
-        android:summary="Please provide your BT Address"/>
+        android:title="Bluetooth Device"
+        android:dialogTitle="Choose Bluetooth Device" />
     <EditTextPreference android:title="Launch Code"
         android:key="lcode"
-        android:summary="4 Digit Launch Code"/>
+        android:dialogTitle="4 Digit Launch Code"
+        android:maxLength="4"
+        android:inputType="number"/>
 </PreferenceScreen>

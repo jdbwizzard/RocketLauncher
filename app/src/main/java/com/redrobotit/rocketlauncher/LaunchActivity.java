@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +46,7 @@ public class LaunchActivity extends Activity {
     private OutputStream outputStream;
     private InputStream inputStream;
     boolean con=false;
+    SharedPreferences SP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,8 @@ public class LaunchActivity extends Activity {
 
         soundID_beep = soundPool.load(this,R.raw.beep,1);
         soundID_explosion = soundPool.load(this,R.raw.explosion,1);
+
+        SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         if(BTinit()){
             con = BTconnect();
@@ -78,8 +80,7 @@ public class LaunchActivity extends Activity {
             });
         }
 
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        btMac = SP.getString("btmac", "NA");
+
 
 
     }
@@ -92,9 +93,10 @@ public class LaunchActivity extends Activity {
     }
 
     public void onClickLaunch(View view){
-
+        led();
         new CountDownTimer(5500, 1000) {
             TextView tTV = (TextView)findViewById(R.id.timerTV);
+
             public void onTick(long millisUntilFinished) {
                 long sec = ((millisUntilFinished + 99) / 1000 );
                 tTV.setText("" + sec);
@@ -115,11 +117,24 @@ public class LaunchActivity extends Activity {
                         }
                     }, 3000);
                 }else{
-                    tTV.setText("LAUNCH FAILUURE!!!");
+                    tTV.setText("LAUNCH FAILURE!!!");
                 }
             }
 
         }.start();
+    }
+
+    public void led(){
+        if(con) {
+            String launchCode = "j\n";
+            try {
+                outputStream.write(launchCode.getBytes());
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     @TargetApi(21)
@@ -179,14 +194,17 @@ public class LaunchActivity extends Activity {
         }
         else
         {
-            for (BluetoothDevice iterator : bondedDevices)
-            {
-                if(iterator.getAddress().equals(DEVICE_ADDRESS))
-                {
-                    device=iterator;
-                    found=true;
-                    break;
+            btMac = SP.getString("btmac", "NA");
+            if(!btMac.equals("NA")) {
+                for (BluetoothDevice iterator : bondedDevices) {
+                    if (iterator.getAddress().equals( btMac)) {
+                        device = iterator;
+                        found = true;
+                        break;
+                    }
                 }
+            } else {
+
             }
         }
         return found;
@@ -218,7 +236,7 @@ public class LaunchActivity extends Activity {
 
         }
 
-
+        led();
         return connected;
     }
 
