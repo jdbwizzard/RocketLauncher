@@ -129,7 +129,7 @@ public class LaunchActivity extends Activity {
             String launchCode = "j\n";
             try {
                 outputStream.write(launchCode.getBytes());
-                socket.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
